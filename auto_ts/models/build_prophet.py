@@ -231,7 +231,7 @@ class BuildProphet(BuildBase):
         if  cv_in == 0:
             print('Skipping cross validation steps since cross_validation = %s' %cv_in)
             model = Prophet(growth="linear")
-            kwargs = {'iter':1e2} ## this limits iterations and hence speeds up prophet
+            kwargs = {'iter':100} ## this limits iterations and hence speeds up prophet
         else:
             for fold_number, (train_index, test_index) in enumerate(cv.split(dft)):
                 dftx = dft.head(len(train_index)+len(test_index))
@@ -251,7 +251,7 @@ class BuildProphet(BuildBase):
                 #### Fit the model with train_fold data ####
                 ############################################
 
-                kwargs = {'iter':1e2} ## this limits iterations and hence speeds up prophet
+                kwargs = {'iter':100} ## this limits iterations and hence speeds up prophet
                 model.fit(train_fold, **kwargs)
 
                 #################################################
@@ -563,7 +563,7 @@ def easy_cross_validation(train, target, initial, horizon, period):
         if len(test_fold) == 0:
             break
         model = Prophet(growth="linear")
-        kwargs = {'iter':1e2} ## this limits iterations and hence speeds up prophet
+        kwargs = {'iter':100} ## this limits iterations and hence speeds up prophet
         model.fit(train_fold, **kwargs)
         future_period = model.make_future_dataframe(freq="MS",periods=horizon)
         forecast_df = model.predict(future_period)
